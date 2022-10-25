@@ -10,13 +10,13 @@ import image from "../../assets/images/user.jpg";
 const NavigationBar = () => {
   return (
     <div className="bg-white px-6 pt-2 grid grid-rows-2 grid-cols-2 h-40 md:h-32 md:grid-cols-4 md:grid-rows-1 md:items-center text-gray-500 border-gray-100 border-1  border-solid ">
-      <span className="font-bold text-2xl text-blue-600 self-center ">
+      <span className="font-bold text-2xl text-blue-600 self-center md:text-3xl">
         MORENT
       </span>
       <div className=" border-gray-100 border-2  border-solid w-full flex justify-between px-6 py-1 rounded-2xl items-center  col-span-2  order-2 md:order-1 md:col-span-2 md:w-9/12 md:rounded-3xl self-center md:mt-0 ">
         <FontAwesomeIcon icon={faFilter} />
         <input
-          type="text"
+          type="search"
           name="search"
           className=" w-full  px-3 text-xs py-3 focus:outline-none"
           placeholder="چیزی را جستجو کنید..."
