@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <div className="p-6 md:bg-white md:flex md:flex-wrap md:justify-between ">
+    <div className="p-6 md:bg-white md:flex md:flex-wrap md:justify-between md:h-24">
       <div className=" w-52 h-20  flex flex-col justify-between mb-4">
         <span className="font-bold text-2xl text-blue-600  md:text-3xl">
           MORENT

@@ -9,7 +9,7 @@ import {
 import image from "../../assets/images/user.jpg";
 const NavigationBar = () => {
   return (
-    <div className="bg-white px-6 pt-2 grid grid-rows-2 grid-cols-2 h-40 md:h-32 md:grid-cols-4 md:grid-rows-1 md:items-center text-gray-500 border-gray-100 border-1  border-solid ">
+    <div className="bg-white px-6 pt-2 grid grid-rows-2 grid-cols-2 h-40 md:h-20 md:grid-cols-4 md:grid-rows-1 md:items-center text-gray-500 border-gray-100 border-1  border-solid ">
       <span className="font-bold text-2xl text-blue-600 self-center md:text-3xl">
         MORENT
       </span>
