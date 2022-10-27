@@ -17,7 +17,7 @@ const DatePicker = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterJalaali}>
       <Stack spacing={1}>
-        <div className=" w-80 h-32 bg-white   p-4 rounded-lg mb-2 md:w-full md:h-32">
+        <div className=" w-80 h-32 bg-white   p-4 rounded-lg mb-2 md:w-full md:h-32 self-center">
           <p className=" font-semibold text-base mb-2">دریافت خودرو</p>
           <div className="flex gap-4 items-center justify-between text-slate-500">
             <select className=" h-14 w-16 md:w-24 bg-white border border-gray-400 rounded hover:border-slate-700 focus:border-blue-600 focus:border-2">
