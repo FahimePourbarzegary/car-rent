@@ -60,7 +60,7 @@ const Catalogue = () => {
               <p className=" line-through invisible">11000تومان</p>
             </div>
           </div>
-          <Button />
+          <Button title="حالا اجاره کن" />
         </div>
       </div>
     </div>

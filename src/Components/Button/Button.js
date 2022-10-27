@@ -1,13 +1,13 @@
-const Button = () => {
+const Button = ({ title }) => {
   return (
-    <>
+    <div className=" w-full flex justify-center items-center">
       <button
         type="submit"
-        className=" bg-blue-700 w-24 h-9 rounded text-white font-semibold text-base hover:bg-blue-500 hover:w-28 md:w-28 md:h-11"
+        className=" py-3 px-2 text-center bg-blue-700  rounded text-white font-semibold text-base hover:bg-blue-500  "
       >
-        حالا اجاره کن
+        {title}
       </button>
-    </>
+    </div>
   );
 };
 
