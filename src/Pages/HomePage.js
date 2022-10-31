@@ -1,10 +1,22 @@
+import { useEffect } from "react";
 import Button from "../Components/Button/Button";
 import Catalogue from "../Components/Catalogue/Catalogue";
 import DatePicker from "../Components/DatePicker/DatePicker";
 import HeroSection from "../Components/HeroSection/HeroSection";
 import Layout from "../Layout/Layout";
-
+import { useGetCarsQuery } from "../Services/carsApi";
+import { toast } from "react-toastify";
 const HomePage = () => {
+  const { data, isLoading, isError, error } = useGetCarsQuery();
+  useEffect(() => {
+    isError && toast.error(error);
+  }, [isError, error]);
+
+  if (isLoading) {
+    return <div>loading</div>;
+  }
+
+  console.log(error);
   return (
     <Layout>
       <HeroSection />
@@ -21,11 +33,17 @@ const HomePage = () => {
             نمایش همه
           </a>
         </div>
-        <div className="flex overflow-auto p-6 gap-5 md:gap-8">
-          <Catalogue />
-          <Catalogue />
-          <Catalogue />
-          <Catalogue />
+        <div className=" w-full flex overflow-auto p-6 gap-5 xl:grid  md:gap-10 xl:grid-cols-4">
+          {data?.map((item) => {
+            if (item.id < 5) {
+              return (
+                <div key={item.id}>
+                  <Catalogue {...item} />
+                </div>
+              );
+            }
+            return <></>;
+          })}
         </div>
       </section>
       <section className="py-4">
@@ -34,14 +52,15 @@ const HomePage = () => {
         </p>
         <div
           className=" w-full p-6 grid gap-5
-        md:grid-cols-2 md:gap-8 lg:grid-cols-4"
+        md:grid-cols-2 md:gap-8 xl:grid-cols-4"
         >
-          <Catalogue />
-          <Catalogue />
-          <Catalogue />
-          <Catalogue />
-          <Catalogue />
-          <Catalogue />
+          {data?.map((item) => {
+            return (
+              <div key={item.id}>
+                <Catalogue {...item} />
+              </div>
+            );
+          })}
         </div>
 
         <Button title="   خودرو های بیشتر" />
