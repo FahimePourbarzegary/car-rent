@@ -3,6 +3,7 @@ import HomePage from "./Pages/HomePage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FilterPage from "./Pages/FilterPage";
+import DetailPage from "./Pages/DetailPage";
 function App() {
   return (
     <>
@@ -10,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/FilterPage" element={<FilterPage />} />
+        <Route path="/DetailPage" element={<DetailPage />} />
       </Routes>
     </>
   );
