@@ -3,6 +3,7 @@ import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faGasPump, faUsers } from "@fortawesome/free-solid-svg-icons";
 import faSteeringWheel from "../../assets/images/steeringwheel.svg";
 import Button from "../Button/Button";
+import { Link } from "react-router-dom";
 const Catalogue = ({
   id,
   name,
@@ -17,6 +18,7 @@ const Catalogue = ({
   return (
     <div className="w-full flex justify-center items-center">
       <div className=" p-4 w-80 h-60 bg-white rounded-xl flex flex-col justify-between  text-slate-500 md:w-72 md:h-96 md:p-6 ">
+        {/*header  section */}
         <div className="flex justify-between items-center">
           <div>
             <p className=" font-semibold text-base text-slate-800 md:text-xl md:font-bold">
@@ -30,6 +32,7 @@ const Catalogue = ({
             <FontAwesomeIcon icon={faHeart} />
           </div>
         </div>
+        {/*summary  section */}
         <div className="flex justify-between items-center md:flex-col md:h-full md:justify-evenly">
           <div>
             <img src={image && image[0]} alt="car_image" />
@@ -56,6 +59,7 @@ const Catalogue = ({
             </div>
           </div>
         </div>
+        {/*footer  section */}
         <div className="flex justify-between items-center">
           <div>
             <div className="flex font-bold text-slate-800">
@@ -67,7 +71,9 @@ const Catalogue = ({
               <p className=" line-through">{off}تومان</p>
             </div>
           </div>
-          <Button title="حالا اجاره کن" />
+          <Link to={`/DetailPage/${id}`}>
+            <Button title="حالا اجاره کن" />
+          </Link>
         </div>
       </div>
     </div>

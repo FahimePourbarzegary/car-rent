@@ -2,14 +2,38 @@ import Layout from "../Layout/Layout";
 import stars from "../assets/images/stars.svg";
 import Button from "../Components/Button/Button";
 import Comments from "../Components/Comments/Comments";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useGetCarQuery } from "../Services/carsApi";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { toast } from "react-toastify";
 const DetailPage = () => {
-  const [urlImage, setUrlImage] = useState(
-    "https://firebasestorage.googleapis.com/v0/b/car-rent-cada4.appspot.com/o/Nissan%20GT%20-%20R.svg?alt=media&token=64d0977d-84ee-476f-8ccd-54e51006d193"
-  );
+  const { id } = useParams();
+  const {
+    data: car,
+    error,
+    isError,
+    isLoading,
+  } = useGetCarQuery(id ? id : skipToken);
+  useEffect(() => {
+    isError && toast.error(error);
+  }, [isError, error]);
+  useEffect(() => {
+    if (!isLoading) {
+      setUrlImage(car?.image[0]);
+    }
+  }, [isLoading, car]);
+  const [urlImage, setUrlImage] = useState(car?.image[0]);
+  const [showAllComments, setShowAllComments] = useState(false);
   //change image when user click it
-  const changeimageHandler=(url)=>{
+  const changeimageHandler = (url) => {
     setUrlImage(url);
+  };
+  const changeCommentHandler = () => {
+    setShowAllComments(!showAllComments);
+  };
+  if (isLoading) {
+    return <div>loading</div>;
   }
   return (
     <Layout>
@@ -17,56 +41,44 @@ const DetailPage = () => {
         <div className="flex flex-col justify-center items-center lg:flex-row  lg:justify-between lg:items-start lg:gap-5 ">
           {/* Image section */}
           <div className="lg:w-3/6">
-            <div className=" bg-blue-600  h-[232px] lg:w-[492]  rounded-lg ">
+            <div className=" bg-blue-600  h-[232px] lg:w-[492] lg:h-[272px] rounded-lg flex justify-center items-center  ">
               <img
                 src={urlImage}
                 alt="car"
-                className="w-full  h-[232px] rounded-lg"
+                className=" w-full rounded-lg  lg:w-[492] lg:h-[272px]"
               />
             </div>
             <div className="flex justify-between py-4 my-2">
               <button
                 className="w-24 h-16 "
-                onClick={() =>
-                  changeimageHandler(
-                    "https://firebasestorage.googleapis.com/v0/b/car-rent-cada4.appspot.com/o/View%203.svg?alt=media&token=3cf8eef3-ce84-4359-9bac-f90250419605"
-                  )
-                }
+                onClick={() => changeimageHandler(car?.image[0])}
               >
                 <img
-                  src="https://firebasestorage.googleapis.com/v0/b/car-rent-cada4.appspot.com/o/View%203.svg?alt=media&token=3cf8eef3-ce84-4359-9bac-f90250419605"
+                  src={car?.image[0]}
                   alt="car"
-                  className="h-16 hover:border-2 hover:border-solid hover:border-blue-600 p-1  rounded-[10px] "
+                  className="h-16 hover:border-2 hover:border-solid hover:border-blue-600 p-1  rounded-[10px] lg:w-full"
                 />
               </button>
               <button
                 className=" w-24 h-16  rounded-[10px] "
-                onClick={() =>
-                  changeimageHandler(
-                    "https://firebasestorage.googleapis.com/v0/b/car-rent-cada4.appspot.com/o/View%202.svg?alt=media&token=b197ce00-1080-4013-9837-311b67990d0c"
-                  )
-                }
+                onClick={() => changeimageHandler(car?.image[1])}
               >
                 {" "}
                 <img
-                  src="https://firebasestorage.googleapis.com/v0/b/car-rent-cada4.appspot.com/o/View%202.svg?alt=media&token=b197ce00-1080-4013-9837-311b67990d0c"
+                  src={car?.image[1]}
                   alt="car"
-                  className="h-16 hover:border-2 hover:border-solid hover:border-blue-600 p-1  rounded-[10px] "
+                  className="h-16 hover:border-2 hover:border-solid hover:border-blue-600 p-1  rounded-[10px]"
                 />
               </button>
               <button
-                className=" w-24 h-16 rounded-[10px] hover:border-2 hover:border-solid hover:border-blue-600 p-1 "
-                onClick={() =>
-                  changeimageHandler(
-                    "https://firebasestorage.googleapis.com/v0/b/car-rent-cada4.appspot.com/o/Koenigsegg.svg?alt=media&token=af35cd23-c0ed-4e49-9448-8120779d9f74"
-                  )
-                }
+                className=" w-24 h-16 rounded-[10px] "
+                onClick={() => changeimageHandler(car?.image[2])}
               >
                 {" "}
                 <img
-                  src="https://firebasestorage.googleapis.com/v0/b/car-rent-cada4.appspot.com/o/Koenigsegg.svg?alt=media&token=af35cd23-c0ed-4e49-9448-8120779d9f74"
+                  src={car?.image[2]}
                   alt="car"
-                  className=" rounded-[10px] "
+                  className=" rounded-[10px] h-16 hover:border-2 hover:border-solid hover:border-blue-600 p-1  "
                 />
               </button>
             </div>
@@ -75,72 +87,68 @@ const DetailPage = () => {
           <div className=" bg-white rounded-lg p-4 flex flex-col gap-y-4 justify-evenly lg:w-3/6">
             <div>
               {" "}
-              <span>Nissan</span>
+              <span>{car?.name}</span>
               <div>
                 <div className="flex ">
                   <img src={stars} alt="stars-rank" />
                   <span className=" text-xs font-medium text-slate-500">
-                    440+ بازدید
+                    {car?.reviewer} بازدید
                   </span>
                 </div>
               </div>
             </div>
             <span className=" text-xs font-normal text-slate-500">
-              لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با
-              استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله
-              در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد
-              نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد،
-              کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان
-              جامعه و متخصصان را می طلبد.
+              {car?.description}
             </span>
             <div className="w-full grid grid-cols-2 gap-2 gap-x-4">
-              <div className="flex justify-between items-center">
+              <div className="flex justify-evenly items-center">
                 <span className=" text-xs font-medium text-slate-500">
                   نوع خودرو{" "}
                 </span>
                 <span className=" font-semibold text-xs text-slate-800">
-                  اسپورت{" "}
+                  {car?.type}
                 </span>
               </div>
-              <div className="flex justify-between items-center">
+              <div className="flex justify-evenly items-center">
                 <span className=" text-xs font-medium text-slate-500">
-                  نوع خودرو{" "}
+                  نوع فرمان{" "}
                 </span>
                 <span className=" font-semibold text-xs text-slate-800">
-                  اسپورت{" "}
+                  {car?.steering}
                 </span>
               </div>
-              <div className="flex justify-between items-center">
+              <div className="flex justify-evenly items-center">
                 <span className=" text-xs font-medium text-slate-500">
-                  نوع خودرو{" "}
+                  ظرفیت{" "}
                 </span>
                 <span className=" font-semibold text-xs text-slate-800">
-                  اسپورت{" "}
+                  {car?.capacity} نفره
                 </span>
               </div>
-              <div className="flex justify-between items-center">
+              <div className="flex justify-evenly items-center">
                 <span className=" text-xs font-medium text-slate-500">
-                  نوع خودرو{" "}
+                  بنزین
                 </span>
                 <span className=" font-semibold text-xs text-slate-800">
-                  اسپورت{" "}
+                  {car?.gasoline} لیتر
                 </span>
               </div>
             </div>
-            <div className=" flex justify-between items-center gap-x-12">
+            <div className="flex justify-between items-center">
               <div>
                 <div className="flex font-bold text-slate-800">
                   <p className=" font-bold text-xs self-end text-slate-500">
                     روز
                   </p>
-                  <p>/100000</p>
+                  <p>/{car?.price}</p>
                   <p className="px-1">تومان </p>
                 </div>
-                <div>
-                  <p className=" line-through">1000تومان</p>
+                <div className={car?.off ? "" : "hidden"}>
+                  <p className=" line-through">{car?.off}تومان</p>
                 </div>
               </div>
-              <Button title="حالا اجاره کن" className="self-end" />
+
+              <Button title="حالا اجاره کن" />
             </div>
           </div>
         </div>
@@ -149,15 +157,33 @@ const DetailPage = () => {
           <div>
             <span className=" font-semibold text-xl text-slate-900">نظرات</span>
             <span className=" px-3 py-[6px] bg-blue-600 rounded mr-3 text-white font-bold">
-              13
+              {car?.reviews.length}
             </span>
           </div>
           <div className="flex flex-col gap-y-6 ">
-            <Comments />
-            <Comments />
-            <Comments />
+            {/* Comments */}
+            {showAllComments
+              ? car?.reviews.length
+                ? car?.reviews.map((c) => {
+                    return <Comments {...c} />;
+                  })
+                : ""
+              : car?.reviews.length
+              ? car?.reviews
+                  .slice(0, car?.reviews.length - 1)
+                  .map((c) => <Comments {...c} />)
+              : ""}
             <div className="w-full flex justify-center items-center ">
-              <button className="text-slate-600 text-xs">نمایش بیشتر</button>
+              <button
+                className="text-slate-600 text-xs"
+                onClick={() => changeCommentHandler()}
+              >
+                {car?.reviews.length
+                  ? showAllComments
+                    ? "نمایش کمتر"
+                    : "نمایش بیشتر"
+                  : ""}
+              </button>
             </div>
           </div>
         </div>

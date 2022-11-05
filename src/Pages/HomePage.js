@@ -24,6 +24,7 @@ const HomePage = () => {
         <DatePicker />
         <DatePicker />
       </div>
+      {/*popular  section */}
       <section className="py-4">
         <div className="w-full  px-8 flex justify-between items-center">
           <p className=" md:pr-18 font-semibold text-slate-600 text-base md:text-xl">
@@ -33,6 +34,7 @@ const HomePage = () => {
             نمایش همه
           </a>
         </div>
+
         <div className=" w-full flex overflow-auto p-6 gap-5 xl:grid  md:gap-10 xl:grid-cols-4">
           {data?.map((item) => {
             if (item.id < 5) {
@@ -41,11 +43,11 @@ const HomePage = () => {
                   <Catalogue {...item} />
                 </div>
               );
-            }
-            return <></>;
+            } else return "";
           })}
         </div>
       </section>
+      {/*reccommand  section */}
       <section className="py-4">
         <p className=" pr-8  md:pr-18 font-semibold text-slate-600 text-base md:text-xl">
           خودرو های پیشنهادی

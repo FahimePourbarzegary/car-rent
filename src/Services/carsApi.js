@@ -1,9 +1,10 @@
 import { fakeBaseQuery, createApi } from "@reduxjs/toolkit/query/react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 export const carsApi = createApi({
   reducerPath: "carsApi",
   baseQuery: fakeBaseQuery(),
+  tagTypes: ["car"],
   endpoints: (builder) => ({
     getCars: builder.query({
       async queryFn() {
@@ -18,11 +19,24 @@ export const carsApi = createApi({
             });
           });
           return { data: cars };
-        } catch (error) {
-          return { error };
+        } catch (err) {
+          return { error: err };
+        }
+      },
+      providesTags: ["car"],
+    }),
+    getCar: builder.query({
+      async queryFn(id) {
+        try {
+          const carRef = doc(db, "cars", id);
+          const Snapshot = await getDoc(carRef);
+          return { data: Snapshot.data() };
+        } catch (err) {
+          return { error: err };
         }
       },
     }),
+    providesTags: ["car"],
   }),
 });
-export const { useGetCarsQuery } = carsApi;
+export const { useGetCarsQuery, useGetCarQuery } = carsApi;
