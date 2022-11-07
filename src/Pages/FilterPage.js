@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-//import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "../Components/Button/Button";
 import Catalogue from "../Components/Catalogue/Catalogue";
@@ -7,11 +6,8 @@ import DatePicker from "../Components/DatePicker/DatePicker";
 import Layout from "../Layout/Layout";
 import { useGetCarsQuery } from "../Services/carsApi";
 
-const FilterPage = ({ searchValue="", setSearchValue }) => {
+const FilterPage = ({ searchValue = "", setSearchValue }) => {
   const { data, isLoading, isError, error } = useGetCarsQuery();
- // const location = useLocation();
- // const searchValue = location.state.carName;
-  //console.log(location.state.carName);
   const [filteredCar, setFilteredCar] = useState([]);
   const [check, setCheck] = useState({
     p2: false,
@@ -35,9 +31,10 @@ const FilterPage = ({ searchValue="", setSearchValue }) => {
     if (!isLoading) {
       result = [...data];
       result = filterByName(result);
+      result = filterByType(result);
       setFilteredCar(result);
     }
-  }, [isLoading, data, searchValue]);
+  }, [isLoading, data, searchValue, check]);
   useEffect(() => {
     if (dragStarted && !dragging) {
       setDragging(true);
@@ -58,6 +55,22 @@ const FilterPage = ({ searchValue="", setSearchValue }) => {
         .toString()
         .toLowerCase()
         .includes(searchValue.toString().toLowerCase())
+    );
+  };
+  //Filter By type
+  const filterByType = (array) => {
+    return array.filter(
+      (c) =>
+        (check.sport && c.type === "اسپورت") ||
+        (check.sedan && c.type === "سدان") ||
+        (check.coupe && c.type === "کوپه") ||
+        (check.SUV && c.type === "شاسی بلند(SUV)") ||
+        (check.hatchback && c.type === "هاچ بک") ||
+        (!check.sport &&
+          !check.sedan &&
+          !check.coupe &&
+          !check.SUV &&
+          !check.hatchback)
     );
   };
   return (
