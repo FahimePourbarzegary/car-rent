@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { useGetCarQuery } from "../Services/carsApi";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { toast } from "react-toastify";
-const DetailPage = () => {
+const DetailPage = ({ searchValue = "", setSearchValue }) => {
   const { id } = useParams();
   const {
     data: car,
@@ -36,7 +36,7 @@ const DetailPage = () => {
     return <div>loading</div>;
   }
   return (
-    <Layout>
+    <Layout setSearchValue={setSearchValue} searchValue={searchValue}>
       <section className=" p-6 flex flex-col justify-evenly items-center my-3">
         <div className="flex flex-col justify-center items-center lg:flex-row  lg:justify-between lg:items-start lg:gap-5 ">
           {/* Image section */}

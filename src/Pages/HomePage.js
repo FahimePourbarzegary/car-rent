@@ -6,7 +6,7 @@ import HeroSection from "../Components/HeroSection/HeroSection";
 import Layout from "../Layout/Layout";
 import { useGetCarsQuery } from "../Services/carsApi";
 import { toast } from "react-toastify";
-const HomePage = () => {
+const HomePage = ({ searchValue = "", setSearchValue }) => {
   const { data, isLoading, isError, error } = useGetCarsQuery();
   useEffect(() => {
     isError && toast.error(error);
@@ -18,7 +18,7 @@ const HomePage = () => {
 
   console.log(error);
   return (
-    <Layout>
+    <Layout setSearchValue={setSearchValue} searchValue={searchValue}>
       <HeroSection />
       <div className=" w-full py-4 px-6 md:flex md:justify-between md:items-center md:gap-24 md:px-16 ">
         <DatePicker />
