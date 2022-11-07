@@ -35,8 +35,8 @@ export const carsApi = createApi({
           return { error: err };
         }
       },
+      providesTags: ["car"],
     }),
-    providesTags: ["car"],
   }),
 });
 export const { useGetCarsQuery, useGetCarQuery } = carsApi;
