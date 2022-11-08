@@ -28,13 +28,55 @@ const FilterPage = ({ searchValue = "", setSearchValue }) => {
   const [dragging, setDragging] = useState(false);
   useEffect(() => {
     let result;
+    //Filter By name
+    const filterByName = (array) => {
+      return array.filter((c) =>
+        c.name
+          .toString()
+          .toLowerCase()
+          .includes(searchValue.toString().toLowerCase())
+      );
+    };
+    //Filter By type
+    const filterByType = (array) => {
+      return array.filter(
+        (c) =>
+          (check.sport && c.type === "اسپورت") ||
+          (check.sedan && c.type === "سدان") ||
+          (check.coupe && c.type === "کوپه") ||
+          (check.SUV && c.type === "شاسی بلند(SUV)") ||
+          (check.hatchback && c.type === "هاچ بک") ||
+          (!check.sport &&
+            !check.sedan &&
+            !check.coupe &&
+            !check.SUV &&
+            !check.hatchback)
+      );
+    };
+    //Filter By capacity
+    const filterByCapacity = (array) => {
+      return array.filter(
+        (c) =>
+          (check.p2 && c.capacity === 2) ||
+          (check.p4 && c.capacity === 4) ||
+          (check.p6 && c.capacity === 6) ||
+          (check.p8 && c.capacity >= 8) ||
+          (!check.p2 && !check.p4 && !check.p6 && !check.p8)
+      );
+    };
+    //Filter By Price
+    const filterByPrice = (array) => {
+      return array.filter((c) => parseInt(c.price) <= price);
+    };
     if (!isLoading) {
       result = [...data];
       result = filterByName(result);
       result = filterByType(result);
+      result = filterByCapacity(result);
+      result = filterByPrice(result);
       setFilteredCar(result);
     }
-  }, [isLoading, data, searchValue, check]);
+  }, [isLoading, data, searchValue, check, price]);
   useEffect(() => {
     if (dragStarted && !dragging) {
       setDragging(true);
@@ -49,30 +91,7 @@ const FilterPage = ({ searchValue = "", setSearchValue }) => {
     const newCheck = { ...check, [e.target.name]: e.target.checked };
     setCheck(newCheck);
   };
-  const filterByName = (array) => {
-    return array.filter((c) =>
-      c.name
-        .toString()
-        .toLowerCase()
-        .includes(searchValue.toString().toLowerCase())
-    );
-  };
-  //Filter By type
-  const filterByType = (array) => {
-    return array.filter(
-      (c) =>
-        (check.sport && c.type === "اسپورت") ||
-        (check.sedan && c.type === "سدان") ||
-        (check.coupe && c.type === "کوپه") ||
-        (check.SUV && c.type === "شاسی بلند(SUV)") ||
-        (check.hatchback && c.type === "هاچ بک") ||
-        (!check.sport &&
-          !check.sedan &&
-          !check.coupe &&
-          !check.SUV &&
-          !check.hatchback)
-    );
-  };
+
   return (
     <Layout setSearchValue={setSearchValue} searchValue={searchValue}>
       <section className=" relative flex flex-col md:flex-row ">
@@ -252,8 +271,8 @@ const FilterPage = ({ searchValue = "", setSearchValue }) => {
               id="price"
               type="range"
               min="1"
-              max="100000"
-              step="100"
+              max="1000000"
+              step="500"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               onMouseDown={(e) => {
@@ -277,15 +296,17 @@ const FilterPage = ({ searchValue = "", setSearchValue }) => {
             className=" w-full p-6 grid gap-5
         md:grid-cols-2 md:gap-8 xl:grid-cols-3"
           >
-            {filteredCar
-              ? filteredCar?.map((item) => {
-                  return (
-                    <div key={item.id}>
-                      <Catalogue {...item} />
-                    </div>
-                  );
-                })
-              : console.log(filteredCar)}
+            {filteredCar ? (
+              filteredCar?.map((item) => {
+                return (
+                  <div key={item.id}>
+                    <Catalogue {...item} />
+                  </div>
+                );
+              })
+            ) : (
+              <div>متاسفانه موردی یافت نشد!</div>
+            )}
           </div>
           <Button title="   خودرو های بیشتر" />
         </section>
