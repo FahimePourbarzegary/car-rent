@@ -8,6 +8,7 @@ import { useGetCarsQuery } from "../Services/carsApi";
 import { toast } from "react-toastify";
 const HomePage = ({ searchValue = "", setSearchValue }) => {
   const { data, isLoading, isError, error } = useGetCarsQuery();
+
   useEffect(() => {
     isError && toast.error(error);
   }, [isError, error]);

@@ -3,12 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "../Components/Button/Button";
 import { UserAuth } from "../Context/AuthContext";
-
+import { GoogleButton } from "react-google-button";
+import { useEffect } from "react";
 const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { createUser } = UserAuth();
+  const { createUser, googleSignIn, user } = UserAuth();
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,6 +22,20 @@ const SignupPage = () => {
       console.log(error);
     }
   };
+  const handleGoogleSignIn = async () => {
+    try {
+      await googleSignIn();
+    } catch (e) {
+      setError(e.message);
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+      toast.info("وارد حساب شدید.");
+    }
+  }, [user, navigate]);
   return (
     <>
       <form
@@ -67,6 +82,7 @@ const SignupPage = () => {
               اینجا کلیک کنید.
             </Link>
           </p>
+          <GoogleButton onClick={handleGoogleSignIn} />
           <p className="invisible">error</p>
         </div>
       </form>
