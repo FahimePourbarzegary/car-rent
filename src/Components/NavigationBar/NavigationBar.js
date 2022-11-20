@@ -42,18 +42,24 @@ const NavigationBar = ({ searchValue, setSearchValue }) => {
         className="order-1 md:order-2  items-center flex w-full justify-end
        md:items-center md:justify-evenly h-full"
       >
-        <div className=" w-7 h-7 rounded-full invisible flex items-center justify-center border-gray-100 border-2  border-solid md:visible relative">
-          <FontAwesomeIcon icon={faBell} />
-          <div className=" w-2 h-2 bg-red-600 rounded-full absolute top-0 right-0 "></div>
-        </div>
-        <div className="w-7 h-7 rounded-full invisible flex items-center justify-center border-gray-100 border-2  border-solid md:visible relative">
-          <FontAwesomeIcon icon={faHeart} />
-          <div className=" w-2 h-2 bg-red-600 rounded-full absolute top-0 right-0 invisible"></div>
-        </div>
-        <div className="w-7 h-7 rounded-full invisible flex items-center justify-center border-gray-100 border-2  border-solid md:visible relative">
-          <FontAwesomeIcon icon={faGear} />
-          <div className=" w-2 h-2 bg-red-600 rounded-full absolute top-0 right-0 invisible"></div>
-        </div>
+        <Link to="/userpage/newsuser">
+          <div className=" w-7 h-7 rounded-full invisible flex items-center justify-center border-gray-100 border-2  border-solid md:visible relative">
+            <FontAwesomeIcon icon={faBell} />
+            <div className=" w-2 h-2 bg-red-600 rounded-full absolute top-0 right-0 "></div>
+          </div>
+        </Link>
+        <Link to="/userpage/favorites">
+          <div className="w-7 h-7 rounded-full invisible flex items-center justify-center border-gray-100 border-2  border-solid md:visible relative">
+            <FontAwesomeIcon icon={faHeart} />
+            <div className=" w-2 h-2 bg-red-600 rounded-full absolute top-0 right-0 invisible"></div>
+          </div>
+        </Link>
+        <Link to="/userpage">
+          <div className="w-7 h-7 rounded-full invisible flex items-center justify-center border-gray-100 border-2  border-solid md:visible relative">
+            <FontAwesomeIcon icon={faGear} />
+            <div className=" w-2 h-2 bg-red-600 rounded-full absolute top-0 right-0 invisible"></div>
+          </div>
+        </Link>
         {user ? (
           <>
             <button onClick={() => logOut()}>خروج</button>

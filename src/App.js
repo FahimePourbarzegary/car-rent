@@ -8,9 +8,10 @@ import { useState } from "react";
 import SignupPage from "./Pages/SignupPage";
 import { AuthContextProvider } from "./Context/AuthContext";
 import SigninPage from "./Pages/SigninPage";
+import UserPage from "./Pages/UserPage";
 
 function App() {
-  const [searchValue,setSearchValue]=useState("");
+  const [searchValue, setSearchValue] = useState("");
   return (
     <>
       <ToastContainer />
@@ -45,7 +46,8 @@ function App() {
             }
           />
           <Route path="/Signup" element={<SignupPage />} />
-          <Route path="/Signin" element={<SigninPage/>} />
+          <Route path="/Signin" element={<SigninPage />} />
+          <Route path="/userpage/*" element={<UserPage />} />
         </Routes>
       </AuthContextProvider>
     </>
