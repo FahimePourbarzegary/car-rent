@@ -1,6 +1,7 @@
 import {
   faArrowRightFromBracket,
   faBell,
+  faCartShopping,
   faGear,
   faHeart,
   faHouse,
@@ -59,7 +60,7 @@ const UserPage = () => {
                 : "  p-3 rounded-3xl text-slate-400 text-sm flex items-center justify-start gap-3 md:text-base font-semibold cursor-pointer hover:bg-slate-50"
             }
           >
-            <FontAwesomeIcon icon={faHeart} />
+            <FontAwesomeIcon icon={faCartShopping} />
             <span> کارت</span>
           </NavLink>
           <NavLink

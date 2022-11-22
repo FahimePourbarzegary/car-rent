@@ -6,11 +6,11 @@ import {
   faHeart,
   faGear,
 } from "@fortawesome/free-solid-svg-icons";
-import image from "../../assets/images/user.jpg"
+import image from "../../assets/images/user.jpg";
 import { Link } from "react-router-dom";
 import { UserAuth } from "../../Context/AuthContext";
 const NavigationBar = ({ searchValue, setSearchValue }) => {
-  const { logOut, user } = UserAuth();
+  const { user } = UserAuth();
 
   return (
     <div className="bg-white px-6 pt-2 grid grid-rows-2 grid-cols-2 h-40 md:h-20 md:grid-cols-4 md:grid-rows-1 md:items-center text-gray-500 border-gray-100 border-1  border-solid border-b-2">
@@ -62,7 +62,6 @@ const NavigationBar = ({ searchValue, setSearchValue }) => {
         </Link>
         {user ? (
           <>
-            <button onClick={() => logOut()}>خروج</button>
             <div className=" w-7 h-7 rounded-full">
               <img
                 src={user.photoURL || image}
