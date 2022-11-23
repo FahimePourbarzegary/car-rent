@@ -22,8 +22,8 @@ const HomePage = ({ searchValue = "", setSearchValue }) => {
     <Layout setSearchValue={setSearchValue} searchValue={searchValue}>
       <HeroSection />
       <div className=" w-full py-4 px-6 md:flex md:justify-between md:items-center md:gap-24 md:px-16 ">
-        <DatePicker />
-        <DatePicker />
+        <DatePicker title="دریافت خودرو" />
+        <DatePicker title="تحویل خودرو" />
       </div>
       {/*popular  section */}
       <section className="py-4">

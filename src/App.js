@@ -9,6 +9,7 @@ import SignupPage from "./Pages/SignupPage";
 import { AuthContextProvider } from "./Context/AuthContext";
 import SigninPage from "./Pages/SigninPage";
 import UserPage from "./Pages/UserPage";
+import PaymentPage from "./Pages/PaymentPage";
 
 function App() {
   const [searchValue, setSearchValue] = useState("");
@@ -48,6 +49,7 @@ function App() {
           <Route path="/Signup" element={<SignupPage />} />
           <Route path="/Signin" element={<SigninPage />} />
           <Route path="/userpage/*" element={<UserPage />} />
+          <Route path="/payment/:id" element={<PaymentPage />} />
         </Routes>
       </AuthContextProvider>
     </>

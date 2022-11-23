@@ -3,10 +3,12 @@ import stars from "../assets/images/stars.svg";
 import Button from "../Components/Button/Button";
 import Comments from "../Components/Comments/Comments";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useGetCarQuery } from "../Services/carsApi";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLeftLong } from "@fortawesome/free-solid-svg-icons";
 const DetailPage = ({ searchValue = "", setSearchValue }) => {
   const { id } = useParams();
   const {
@@ -15,6 +17,7 @@ const DetailPage = ({ searchValue = "", setSearchValue }) => {
     isError,
     isLoading,
   } = useGetCarQuery(id ? id : skipToken);
+  const navigate = useNavigate();
   useEffect(() => {
     isError && toast.error(error);
   }, [isError, error]);
@@ -38,6 +41,14 @@ const DetailPage = ({ searchValue = "", setSearchValue }) => {
   return (
     <Layout setSearchValue={setSearchValue} searchValue={searchValue}>
       <section className=" p-6 flex flex-col justify-evenly items-center my-3">
+        <button
+          onClick={() => {
+            navigate(-1);
+          }}
+          className="flex self-start text-slate-500"
+        >
+          <FontAwesomeIcon icon={faLeftLong} />
+        </button>
         <div className="flex flex-col justify-center items-center lg:flex-row  lg:justify-between lg:items-start lg:gap-5 ">
           {/* Image section */}
           <div className="lg:w-3/6">
@@ -148,7 +159,9 @@ const DetailPage = ({ searchValue = "", setSearchValue }) => {
                 </div>
               </div>
 
-              <Button title="حالا اجاره کن" />
+              <Link to={`/payment/${id}`}>
+                <Button title="حالا اجاره کن" />
+              </Link>
             </div>
           </div>
         </div>
