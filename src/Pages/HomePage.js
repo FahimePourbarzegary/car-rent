@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import Button from "../Components/Button/Button";
 import Catalogue from "../Components/Catalogue/Catalogue";
-import DatePicker from "../Components/DatePicker/DatePicker";
 import HeroSection from "../Components/HeroSection/HeroSection";
 import Layout from "../Layout/Layout";
 import { useGetCarsQuery } from "../Services/carsApi";
@@ -21,10 +20,6 @@ const HomePage = ({ searchValue = "", setSearchValue }) => {
   return (
     <Layout setSearchValue={setSearchValue} searchValue={searchValue}>
       <HeroSection />
-      <div className=" w-full py-4 px-6 md:flex md:justify-between md:items-center md:gap-24 md:px-16 ">
-        <DatePicker title="دریافت خودرو" />
-        <DatePicker title="تحویل خودرو" />
-      </div>
       {/*popular  section */}
       <section className="py-4">
         <div className="w-full  px-8 flex justify-between items-center">

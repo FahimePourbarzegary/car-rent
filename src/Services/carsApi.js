@@ -1,5 +1,11 @@
 import { fakeBaseQuery, createApi } from "@reduxjs/toolkit/query/react";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 export const carsApi = createApi({
   reducerPath: "carsApi",
@@ -37,6 +43,18 @@ export const carsApi = createApi({
       },
       providesTags: ["car"],
     }),
+    updatePaymentCar: builder.mutation({
+      async queryFn({ id, paymentCarInf }) {
+        try {
+          await updateDoc(doc(db, "cars", id), { ...paymentCarInf });
+          return { data: "ok" };
+        } catch (err) {
+          return { error: err };
+        }
+      },
+      invalidatesTags: ["car"],
+    }),
   }),
 });
-export const { useGetCarsQuery, useGetCarQuery } = carsApi;
+export const { useGetCarsQuery, useGetCarQuery, useUpdatePaymentCarMutation } =
+  carsApi;

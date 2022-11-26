@@ -1,17 +1,22 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Layout from "../Layout/Layout";
-import { useGetCarQuery } from "../Services/carsApi";
+import {
+  useGetCarQuery,
+  useUpdatePaymentCarMutation,
+} from "../Services/carsApi";
 import stars from "../assets/images/stars.svg";
 import DatePicker from "../Components/DatePicker/DatePicker";
 import parsian from "../assets/images/parsian.png";
 import meli from "../assets/images/bank meli.png";
-import Button from "../Components/Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLeftLong } from "@fortawesome/free-solid-svg-icons";
+import { UserAuth } from "../Context/AuthContext";
 const PaymentPage = () => {
+  const { user } = UserAuth();
+  const [updatePaymentCar] = useUpdatePaymentCarMutation();
   const { id } = useParams();
   const {
     data: car,
@@ -20,6 +25,50 @@ const PaymentPage = () => {
     isLoading,
   } = useGetCarQuery(id ? id : skipToken);
   const navigate = useNavigate();
+  const checkRef = useRef(null);
+  const [pickUp, setPickUp] = useState({
+    town: "تهران",
+    date: null,
+    time: null,
+  });
+  const [dropOff, setDropOff] = useState({
+    town: "تهران",
+    date: null,
+    time: null,
+  });
+  const [paymentMethod, setPaymentMethod] = useState("meli");
+  const rentCarHandler = async (e) => {
+    e.preventDefault();
+    if (
+      checkRef.current.checked &&
+      pickUp.date &&
+      pickUp.time &&
+      dropOff.date &&
+      dropOff.time
+    ) {
+      const paymentCarInf = {
+        ...car,
+        paymentinfo: {
+          uid: user.uid,
+          pickup: {
+            town: pickUp.town,
+            date: new Date(pickUp.date).toLocaleDateString(),
+            time: new Date(pickUp.time).toLocaleTimeString(),
+          },
+          dropoff: {
+            town: dropOff.town,
+            date: new Date(dropOff.date).toLocaleDateString(),
+            time: new Date(dropOff.time).toLocaleTimeString(),
+          },
+        },
+      };
+      await updatePaymentCar({ id, paymentCarInf });
+      toast.success(`اجاره شد${car?.name}`);
+      navigate("/");
+    } else {
+      console.log(false);
+    }
+  };
   useEffect(() => {
     isError && toast.error(error.message);
   }, [isError, error]);
@@ -90,8 +139,16 @@ const PaymentPage = () => {
           {" "}
           {/*rental info */}
           <div className=" p-6 bg-white rounded-lg ">
-            <DatePicker title="دریافت خودرو" />
-            <DatePicker title="تحویل خودرو" />
+            <DatePicker
+              title="دریافت خودرو"
+              data={pickUp}
+              setData={setPickUp}
+            />
+            <DatePicker
+              title="تحویل خودرو"
+              data={dropOff}
+              setData={setDropOff}
+            />
           </div>
           {/*method payment */}
           <div className=" p-6 bg-white rounded-lg">
@@ -101,9 +158,11 @@ const PaymentPage = () => {
                 <input
                   className="form-check-input form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                   type="radio"
-                  name="inlineRadioOptions"
+                  name="paymentmethodradio"
                   id="parsian"
-                  value="option1"
+                  value="parsian"
+                  checked={paymentMethod === "parsian"}
+                  onChange={() => setPaymentMethod("parsian")}
                 />
                 <label
                   className="form-check-label inline-block text-gray-800"
@@ -116,9 +175,11 @@ const PaymentPage = () => {
                 <input
                   className="form-check-input form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                   type="radio"
-                  name="inlineRadioOptions"
+                  name="paymentmethodradio"
                   id="meli"
-                  value="option2"
+                  value="meli"
+                  checked={paymentMethod === "meli"}
+                  onChange={() => setPaymentMethod("meli")}
                 />
                 <label
                   className="form-check-label inline-block text-gray-800"
@@ -136,7 +197,7 @@ const PaymentPage = () => {
               <input
                 type="checkbox"
                 id="confirm"
-                value=""
+                ref={checkRef}
                 className="ml-4"
                 required=""
               />
@@ -154,7 +215,15 @@ const PaymentPage = () => {
               </label>
             </div>
             <div className=" flex items-start">
-              <Button title="اجاره خودرو" className="self-start" />
+              <div className=" w-full flex justify-center items-center">
+                <button
+                  type="submit"
+                  className=" py-3 px-2 text-center bg-blue-700  rounded text-white font-semibold text-base hover:bg-blue-500  "
+                  onClick={rentCarHandler}
+                >
+                  اجاره خودرو
+                </button>
+              </div>
             </div>
           </div>
         </div>
