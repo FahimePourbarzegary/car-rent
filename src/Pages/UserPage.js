@@ -12,8 +12,8 @@ import { toast } from "react-toastify";
 import { UserAuth } from "../Context/AuthContext";
 import Layout from "../Layout/Layout";
 import FavoritePage from "./FavoritePage";
-import NwesUser from "./NewsUser";
-
+import NewsUser from "./NewsUser";
+import CardPage from "./CardPage";
 const UserPage = () => {
   const { user, logOut } = UserAuth();
 
@@ -86,7 +86,8 @@ const UserPage = () => {
         </div>
         <Routes>
           <Route path="favorites" element={<FavoritePage />} />
-          <Route path="newsuser" element={<NwesUser />} />
+          <Route path="newsuser" element={<NewsUser />} />
+          <Route path="usercard" element={<CardPage />} />
         </Routes>
       </section>
     </Layout>
