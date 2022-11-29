@@ -12,7 +12,7 @@ import DatePicker from "../Components/DatePicker/DatePicker";
 import parsian from "../assets/images/parsian.png";
 import meli from "../assets/images/bank meli.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLeftLong } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { UserAuth } from "../Context/AuthContext";
 const PaymentPage = () => {
   const { user } = UserAuth();
@@ -26,6 +26,7 @@ const PaymentPage = () => {
   } = useGetCarQuery(id ? id : skipToken);
   const navigate = useNavigate();
   const checkRef = useRef(null);
+  const [isRentShow, setIsRentShow] = useState(false);
   const [pickUp, setPickUp] = useState({
     town: "تهران",
     date: null,
@@ -38,6 +39,7 @@ const PaymentPage = () => {
   });
   const [paymentMethod, setPaymentMethod] = useState("meli");
   const rentCarHandler = async (e) => {
+    //check input and checkbox
     e.preventDefault();
     if (
       checkRef.current.checked &&
@@ -46,27 +48,83 @@ const PaymentPage = () => {
       dropOff.date &&
       dropOff.time
     ) {
+      //set value to send
       const paymentCarInf = {
         ...car,
-        paymentinfo: {
-          uid: user.uid,
-          pickup: {
-            town: pickUp.town,
-            date: new Date(pickUp.date).toLocaleDateString(),
-            time: new Date(pickUp.time).toLocaleTimeString(),
-          },
-          dropoff: {
-            town: dropOff.town,
-            date: new Date(dropOff.date).toLocaleDateString(),
-            time: new Date(dropOff.time).toLocaleTimeString(),
-          },
-        },
+        paymentinfo: car?.paymentinfo
+          ? [
+              ...car?.paymentinfo,
+              {
+                uid: user.uid,
+                pickup: {
+                  town: pickUp.town,
+                  date: new Date(pickUp.date).toLocaleDateString(),
+                  time: new Date(pickUp.time).toLocaleTimeString(),
+                },
+                dropoff: {
+                  town: dropOff.town,
+                  date: new Date(dropOff.date).toLocaleDateString(),
+                  time: new Date(dropOff.time).toLocaleTimeString(),
+                },
+                price:
+                  ((dropOff.date - pickUp.date) / (1000 * 3600 * 24)) *
+                  car?.price,
+              },
+            ]
+          : [
+              {
+                uid: user.uid,
+                pickup: {
+                  town: pickUp.town,
+                  date: new Date(pickUp.date).toLocaleDateString(),
+                  time: new Date(pickUp.time).toLocaleTimeString(),
+                },
+                dropoff: {
+                  town: dropOff.town,
+                  date: new Date(dropOff.date).toLocaleDateString(),
+                  time: new Date(dropOff.time).toLocaleTimeString(),
+                },
+                price:
+                  ((dropOff.date - pickUp.date) / (1000 * 3600 * 24)) *
+                  car?.price,
+              },
+            ],
       };
-      await updatePaymentCar({ id, paymentCarInf });
-      toast.success(`اجاره شد${car?.name}`);
-      navigate("/");
+
+      //if car isnt rent
+      if (!car?.paymentinfo) {
+        await updatePaymentCar({ id, paymentCarInf });
+        toast.success(`اجاره شد${car?.name}`);
+        navigate("/");
+      } else {
+        // car is rent before so check dates
+        //check payment car date and compare with date that user set
+        const filteredDates = car?.paymentinfo
+          .map((dbpay) => {
+            console.log(car?.paymentinfo);
+            if (
+              (new Date(pickUp.date) < new Date(dbpay.pickup.date) ||
+                new Date(pickUp.date) > new Date(dbpay.dropoff.date)) &&
+              (new Date(dbpay.dropoff.date) < new Date(dropOff.date) ||
+                new Date(dropOff.date) < new Date(dbpay.pickup.date))
+            ) {
+              return true;
+            } else {
+              return false;
+            }
+          })
+          .includes(false);
+        //if filteredDates have false so date isnt good and car rent before it
+        if (filteredDates) {
+          toast.error("این ماشین قبلا در این تاریخ اجاره شده است ");
+        } else {
+          await updatePaymentCar({ id, paymentCarInf });
+          toast.success(`اجاره شد${car?.name}`);
+          navigate("/");
+        }
+      }
     } else {
-      console.log(false);
+      toast.error("ورودی ها رو چک کن");
     }
   };
   useEffect(() => {
@@ -109,7 +167,13 @@ const PaymentPage = () => {
               <p className=" font-semibold text-slate-500 text-xs  lg:text-base lg:font-medium">
                 قیمت
               </p>{" "}
-              <p className=" font-semibold">{car?.price} تومان</p>
+              <p className=" font-semibold">
+                {/*calculate number of day */}
+                {pickUp.date && dropOff.date
+                  ? (dropOff.date - pickUp.date) / (1000 * 3600 * 24)
+                  : "1"}
+                *{car?.price} تومان
+              </p>
             </div>
             <div className="flex justify-between items-center py-2">
               <p className=" font-semibold text-slate-500 text-xs lg:text-base lg:font-medium">
@@ -131,7 +195,12 @@ const PaymentPage = () => {
           </div>
           <div className="flex justify-between items-center py-4">
             <p className=" text-xl font-bold">قیمت نهایی</p>
-            <p className=" font-bold">{car?.price}تومان</p>
+            <p className=" font-bold">
+              {pickUp.date && dropOff.date
+                ? ((dropOff.date - pickUp.date) / (1000 * 3600 * 24)) *
+                  car?.price
+                : car?.price}
+            </p>
           </div>
         </div>
         {/*3 section */}
@@ -149,6 +218,32 @@ const PaymentPage = () => {
               data={dropOff}
               setData={setDropOff}
             />
+            <div className=" w-full p-2 border-2 border-blue-400 bg-blue-100 rounded-xl text-sm">
+              {" "}
+              <div
+                onClick={() => {
+                  setIsRentShow(!isRentShow);
+                }}
+              >
+                {" "}
+                <FontAwesomeIcon
+                  icon={faCircleInfo}
+                  className=" text-blue-500 px-2"
+                />
+                <span>وضعیت اجاره ماشین</span>
+              </div>
+              <div className={isRentShow ? "visible" : "hidden"}>
+                {car?.paymentinfo
+                  ? car?.paymentinfo.map((p, index) => {
+                      return (
+                        <p key={index} className="p-3">
+                          {p.pickup.date} تا {p.dropoff.date}
+                        </p>
+                      );
+                    })
+                  : "تا به حال اجاره نشده"}
+              </div>
+            </div>
           </div>
           {/*method payment */}
           <div className=" p-6 bg-white rounded-lg">
