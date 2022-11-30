@@ -16,7 +16,7 @@ const SignupPage = () => {
     try {
       await createUser(email, password);
       toast.info("ثبت نام انجام شد");
-      navigate("/");
+      navigate(-2);
     } catch (e) {
       setError(e.message);
       console.log(error);
@@ -32,7 +32,7 @@ const SignupPage = () => {
   };
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate(-2);
       toast.info("وارد حساب شدید.");
     }
   }, [user, navigate]);
@@ -72,7 +72,7 @@ const SignupPage = () => {
             />
           </div>
 
-          <Button title="Sign Up" />
+          <Button title="ورود" />
           <p className=" text-xs text-slate-600 ">
             اگر از قبل حساب دارید{" "}
             <Link

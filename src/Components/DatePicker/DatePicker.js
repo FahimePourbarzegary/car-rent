@@ -25,7 +25,7 @@ const DatePicker = ({ title, data, setData }) => {
               onChange={handleTownChange}
             >
               {selectTown.map((town, index) => (
-                <option value={index} key={index}>
+                <option value={town} key={index}>
                   {town}
                 </option>
               ))}

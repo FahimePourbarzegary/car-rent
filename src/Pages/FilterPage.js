@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import Button from "../Components/Button/Button";
 import Catalogue from "../Components/Catalogue/Catalogue";
-import DatePicker from "../Components/DatePicker/DatePicker";
 import Layout from "../Layout/Layout";
 import { useGetCarsQuery } from "../Services/carsApi";
 
@@ -20,7 +18,7 @@ const FilterPage = ({ searchValue = "", setSearchValue }) => {
     coupe: false,
     hatchback: false,
   });
-  const [price, setPrice] = useState(500);
+  const [price, setPrice] = useState(1000000);
   useEffect(() => {
     isError && toast.error(error);
   }, [isError, error]);
@@ -96,6 +94,7 @@ const FilterPage = ({ searchValue = "", setSearchValue }) => {
     <Layout setSearchValue={setSearchValue} searchValue={searchValue}>
       <section className=" relative flex flex-col md:flex-row ">
         <div className=" w-full  p-4 pr-8 bg-white md:w-60 lg:w-96">
+          {/*Select type car */}
           <div>
             <p className=" font-semibold text-xs text-slate-500">نوع خودرو</p>
             <div className="flexflex-col justify-center items-start p-2 mt-2">
@@ -186,6 +185,7 @@ const FilterPage = ({ searchValue = "", setSearchValue }) => {
               </div>
             </div>
           </div>
+          {/*Select Capacity Car */}
           <div>
             <p className=" font-semibold text-xs text-slate-500"> ظرفیت</p>
             <div className="flexflex-col justify-center items-start p-2 mt-2">
@@ -259,7 +259,7 @@ const FilterPage = ({ searchValue = "", setSearchValue }) => {
               </div>
             </div>
           </div>
-
+          {/* Select Range of price  */}
           <div>
             <label
               htmlFor="price"
@@ -287,11 +287,8 @@ const FilterPage = ({ searchValue = "", setSearchValue }) => {
             <p> {price} تومان</p>
           </div>
         </div>
+        {/**Shows car */}
         <section className="py-4">
-          <div className=" w-full py-4 px-6 md:flex md:justify-between md:items-center md:gap-24 md:px-16 ">
-            <DatePicker />
-            <DatePicker />
-          </div>
           <div
             className=" w-full p-6 grid gap-5
         md:grid-cols-2 md:gap-8 xl:grid-cols-3"
@@ -308,7 +305,7 @@ const FilterPage = ({ searchValue = "", setSearchValue }) => {
               <div>متاسفانه موردی یافت نشد!</div>
             )}
           </div>
-          <Button title="   خودرو های بیشتر" />
+        
         </section>
       </section>
     </Layout>

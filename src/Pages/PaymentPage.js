@@ -48,79 +48,82 @@ const PaymentPage = () => {
       dropOff.date &&
       dropOff.time
     ) {
-      //set value to send
-      const paymentCarInf = {
-        ...car,
-        paymentinfo: car?.paymentinfo
-          ? [
-              ...car?.paymentinfo,
-              {
-                uid: user.uid,
-                pickup: {
-                  town: pickUp.town,
-                  date: new Date(pickUp.date).toLocaleDateString(),
-                  time: new Date(pickUp.time).toLocaleTimeString(),
-                },
-                dropoff: {
-                  town: dropOff.town,
-                  date: new Date(dropOff.date).toLocaleDateString(),
-                  time: new Date(dropOff.time).toLocaleTimeString(),
-                },
-                price:
-                  ((dropOff.date - pickUp.date) / (1000 * 3600 * 24)) *
-                  car?.price,
-              },
-            ]
-          : [
-              {
-                uid: user.uid,
-                pickup: {
-                  town: pickUp.town,
-                  date: new Date(pickUp.date).toLocaleDateString(),
-                  time: new Date(pickUp.time).toLocaleTimeString(),
-                },
-                dropoff: {
-                  town: dropOff.town,
-                  date: new Date(dropOff.date).toLocaleDateString(),
-                  time: new Date(dropOff.time).toLocaleTimeString(),
-                },
-                price:
-                  ((dropOff.date - pickUp.date) / (1000 * 3600 * 24)) *
-                  car?.price,
-              },
-            ],
-      };
-
-      //if car isnt rent
-      if (!car?.paymentinfo) {
-        await updatePaymentCar({ id, paymentCarInf });
-        toast.success(`اجاره شد${car?.name}`);
-        navigate("/");
+      if (new Date(pickUp.date) > new Date(dropOff.date)) {
+        toast.error("وروردی تاریخ ها اشتباه است");
       } else {
-        // car is rent before so check dates
-        //check payment car date and compare with date that user set
-        const filteredDates = car?.paymentinfo
-          .map((dbpay) => {
-            console.log(car?.paymentinfo);
-            if (
-              (new Date(pickUp.date) < new Date(dbpay.pickup.date) ||
-                new Date(pickUp.date) > new Date(dbpay.dropoff.date)) &&
-              (new Date(dbpay.dropoff.date) < new Date(dropOff.date) ||
-                new Date(dropOff.date) < new Date(dbpay.pickup.date))
-            ) {
-              return true;
-            } else {
-              return false;
-            }
-          })
-          .includes(false);
-        //if filteredDates have false so date isnt good and car rent before it
-        if (filteredDates) {
-          toast.error("این ماشین قبلا در این تاریخ اجاره شده است ");
-        } else {
+        //set value to send
+        const paymentCarInf = {
+          ...car,
+          paymentinfo: car?.paymentinfo
+            ? [
+                ...car?.paymentinfo,
+                {
+                  uid: user.uid,
+                  pickup: {
+                    town: pickUp.town,
+                    date: new Date(pickUp.date).toLocaleDateString(),
+                    time: new Date(pickUp.time).toLocaleTimeString(),
+                  },
+                  dropoff: {
+                    town: dropOff.town,
+                    date: new Date(dropOff.date).toLocaleDateString(),
+                    time: new Date(dropOff.time).toLocaleTimeString(),
+                  },
+                  price:
+                    ((dropOff.date - pickUp.date) / (1000 * 3600 * 24)) *
+                    car?.price,
+                },
+              ]
+            : [
+                {
+                  uid: user.uid,
+                  pickup: {
+                    town: pickUp.town,
+                    date: new Date(pickUp.date).toLocaleDateString(),
+                    time: new Date(pickUp.time).toLocaleTimeString(),
+                  },
+                  dropoff: {
+                    town: dropOff.town,
+                    date: new Date(dropOff.date).toLocaleDateString(),
+                    time: new Date(dropOff.time).toLocaleTimeString(),
+                  },
+                  price:
+                    ((dropOff.date - pickUp.date) / (1000 * 3600 * 24)) *
+                    car?.price,
+                },
+              ],
+        };
+        //if car isnt rent
+        if (!car?.paymentinfo) {
           await updatePaymentCar({ id, paymentCarInf });
           toast.success(`اجاره شد${car?.name}`);
           navigate("/");
+        } else {
+          // car is rent before so check dates
+          //check payment car date and compare with date that user set
+          const filteredDates = car?.paymentinfo
+            .map((dbpay) => {
+              console.log(car?.paymentinfo);
+              if (
+                (new Date(pickUp.date) < new Date(dbpay.pickup.date) ||
+                  new Date(pickUp.date) > new Date(dbpay.dropoff.date)) &&
+                (new Date(dbpay.dropoff.date) < new Date(dropOff.date) ||
+                  new Date(dropOff.date) < new Date(dbpay.pickup.date))
+              ) {
+                return true;
+              } else {
+                return false;
+              }
+            })
+            .includes(false);
+          //if filteredDates have false so date isnt good and car rent before it
+          if (filteredDates) {
+            toast.error("این ماشین قبلا در این تاریخ اجاره شده است ");
+          } else {
+            await updatePaymentCar({ id, paymentCarInf });
+            toast.success(`اجاره شد${car?.name}`);
+            navigate("/");
+          }
         }
       }
     } else {

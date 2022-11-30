@@ -14,7 +14,7 @@ const SigninPage = () => {
     e.preventDefault();
     try {
       await signIn(email, password);
-      navigate("/");
+      navigate(-1);
       toast.info("وارد حساب شدید.");
     } catch (e) {
       setError(e.message);
@@ -31,7 +31,7 @@ const SigninPage = () => {
   };
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate(-1);
       toast.info("وارد حساب شدید.");
     }
   }, [user, navigate]);
@@ -71,7 +71,7 @@ const SigninPage = () => {
             />
           </div>
 
-          <Button title="Sign In" />
+          <Button title="ثبت نام" />
           <p className=" text-xs text-slate-600 ">
             اگر از قبل حساب ندارید{" "}
             <Link

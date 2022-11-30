@@ -11,7 +11,6 @@ import { Link } from "react-router-dom";
 import { UserAuth } from "../../Context/AuthContext";
 const NavigationBar = ({ searchValue, setSearchValue }) => {
   const { user } = UserAuth();
-
   return (
     <div className="bg-white px-6 pt-2 grid grid-rows-2 grid-cols-2 h-40 md:h-20 md:grid-cols-4 md:grid-rows-1 md:items-center text-gray-500 border-gray-100 border-1  border-solid border-b-2">
       <span className="font-bold text-2xl text-blue-600 self-center md:text-3xl">
@@ -61,7 +60,7 @@ const NavigationBar = ({ searchValue, setSearchValue }) => {
           </div>
         </Link>
         {user ? (
-          <>
+          <Link to="/userpage">
             <div className=" w-7 h-7 rounded-full">
               <img
                 src={user.photoURL || image}
@@ -70,7 +69,7 @@ const NavigationBar = ({ searchValue, setSearchValue }) => {
                 className=" w-full h-7 h-autoshadow rounded-full max-w-ful align-middle border-none object-cover object-fit "
               />
             </div>{" "}
-          </>
+          </Link>
         ) : (
           <Link to="/signup">ورود/ثبت نام</Link>
         )}

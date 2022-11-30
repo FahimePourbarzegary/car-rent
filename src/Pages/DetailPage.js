@@ -9,8 +9,10 @@ import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLeftLong } from "@fortawesome/free-solid-svg-icons";
+import { UserAuth } from "../Context/AuthContext";
 const DetailPage = ({ searchValue = "", setSearchValue }) => {
   const { id } = useParams();
+  const { user } = UserAuth();
   const {
     data: car,
     error,
@@ -159,7 +161,7 @@ const DetailPage = ({ searchValue = "", setSearchValue }) => {
                 </div>
               </div>
 
-              <Link to={`/payment/${id}`}>
+              <Link to={user ? `/payment/${id}` : `/signin`}>
                 <Button title="حالا اجاره کن" />
               </Link>
             </div>
@@ -177,14 +179,14 @@ const DetailPage = ({ searchValue = "", setSearchValue }) => {
             {/* Comments */}
             {showAllComments
               ? car?.reviews.length
-                ? car?.reviews.map((c) => {
-                    return <Comments {...c} />;
+                ? car?.reviews.map((c, index) => {
+                    return <Comments {...c} key={index} />;
                   })
                 : ""
               : car?.reviews.length
               ? car?.reviews
-                  .slice(0, car?.reviews.length - 1)
-                  .map((c) => <Comments {...c} />)
+                  .slice(0, 1)
+                  .map((c, index) => <Comments {...c} key={index} />)
               : ""}
             <div className="w-full flex justify-center items-center ">
               <button

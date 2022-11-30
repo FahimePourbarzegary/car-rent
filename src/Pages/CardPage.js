@@ -20,7 +20,6 @@ const CardPage = () => {
     );
     setFilteredCarPay(filteredCar);
   }, [isLoading, data, user]);
-  console.log(filteredCarPay);
   if (isLoading) {
     return <div>loading</div>;
   }
