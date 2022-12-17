@@ -72,7 +72,7 @@ const SignupPage = () => {
             />
           </div>
 
-          <Button title="ورود" />
+          <Button title="ثبت نام" />
           <p className=" text-xs text-slate-600 ">
             اگر از قبل حساب دارید{" "}
             <Link

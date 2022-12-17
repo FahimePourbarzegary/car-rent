@@ -71,7 +71,7 @@ const SigninPage = () => {
             />
           </div>
 
-          <Button title="ثبت نام" />
+          <Button title=" ورود" />
           <p className=" text-xs text-slate-600 ">
             اگر از قبل حساب ندارید{" "}
             <Link
