@@ -4,7 +4,7 @@
 development........Im programming in this Project just for example of my work in Reactjs
 ### Tools:
 
-Reactjs,Firebase,tailwind.....
+Reactjs,Firebase,tailwind,UseContext,Redux tool-kits.....
 ### ui/ux:
 
 pickolab
