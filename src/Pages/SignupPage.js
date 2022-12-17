@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "../Components/Button/Button";
 import { UserAuth } from "../Context/AuthContext";
@@ -11,12 +11,14 @@ const SignupPage = () => {
   const [error, setError] = useState("");
   const { createUser, googleSignIn, user } = UserAuth();
   const navigate = useNavigate();
+  const [searchParam] = useSearchParams();
+  const redirect = searchParam.get("redirect") || "/";
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await createUser(email, password);
       toast.info("ثبت نام انجام شد");
-      navigate(-2);
+      navigate(redirect);
     } catch (e) {
       setError(e.message);
       console.log(error);
@@ -76,14 +78,14 @@ const SignupPage = () => {
           <p className=" text-xs text-slate-600 ">
             اگر از قبل حساب دارید{" "}
             <Link
-              to="/signin"
+              to={`/signin?redirect=${redirect}`}
               className=" text-sm text-slate-800 font-semibold"
             >
               اینجا کلیک کنید.
             </Link>
           </p>
           <GoogleButton onClick={handleGoogleSignIn} />
-          <p className="invisible">error</p>
+          <p className={error ? `visible` : "invisible"}>{error}</p>
         </div>
       </form>
     </>

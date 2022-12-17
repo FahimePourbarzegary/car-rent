@@ -161,7 +161,7 @@ const DetailPage = ({ searchValue = "", setSearchValue }) => {
                 </div>
               </div>
 
-              <Link to={user ? `/payment/${id}` : `/signin`}>
+              <Link to={user ? `/payment/${id}` : `/signin?redirect=/DetailPage/${id}`}>
                 <Button title="حالا اجاره کن" />
               </Link>
             </div>
